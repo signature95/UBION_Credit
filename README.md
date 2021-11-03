@@ -120,7 +120,7 @@ credit: 사용자의 신용카드 대금 연체를 기준으로 한 신용도
 
 ***
 
-## Contributer
+## Contributors
 
 - [signature95](https://github.com/signature95)
 - [sirenabada](https://github.com/sirenabada)
