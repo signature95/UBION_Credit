@@ -226,27 +226,15 @@ def get_stacking_data(model, X_train, y_train, X_test, n_folds=5):
     
     return train_fold_predict, test_predict_mean
     
-svm_train, svm_test = get_stacking_data(svm, X_train, y_train, X_test)
-rf_train, rf_test = get_stacking_data(rf, X_train, y_train, X_test)
-lr_train, lr_test = get_stacking_data(lr, X_train, y_train, X_test)
-model :  SVC
-model :  RandomForestClassifier
-model :  LogisticRegression
-이제 새로운 new_X_train과 new_X_test를 생성한다
-In [17]:
-new_X_train = np.concatenate((svm_train, rf_train, lr_train), axis = 1)
-new_X_test = np.concatenate((svm_test, rf_test,lr_test), axis = 1)
-In [18]:
-print("원본 : ", X_train.shape, X_test.shape)
-print("새로운 : ", new_X_train.shape, new_X_test.shape)
-원본 :  (455, 30) (114, 30)
-새로운 :  (455, 3) (114, 3)
-In [19]:
-lgbm.fit(new_X_train, y_train)
-stack_pred = lgbm.predict(new_X_test)
-
-print("정확도 : {0:.4f}".format(accuracy_score(stack_pred, y_test)))
-정확도 : 0.9561
+    ---
+   
+    svm_train, svm_test = get_stacking_data(svm, X_train, y_train, X_test)
+    rf_train, rf_test = get_stacking_data(rf, X_train, y_train, X_test)
+    lr_train, lr_test = get_stacking_data(lr, X_train, y_train, X_test)
+    
+    model :  SVC
+    model :  RandomForestClassifier
+    model :  LogisticRegression
 
 Ref: [stacking ensemble](https://lsjsj92.tistory.com/558)
 
