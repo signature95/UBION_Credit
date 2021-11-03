@@ -194,6 +194,59 @@ CV기반 스태킹은 각 모델들이 교차 검증으로 최종 모델을 위�
 <img width="452" alt="image" src="https://user-images.githubusercontent.com/87803612/140097275-271627e6-7407-46ae-92cd-20246a69bc5c.png">
 
 
+from sklearn.model_selection import KFold, StratifiedKFold
+
+def get_stacking_data(model, X_train, y_train, X_test, n_folds=5):
+    kfold = KFold(n_splits = n_folds, random_state = 0)
+    
+    # 최종 모델에서 사용할 데이터 셋 셋팅(0 값으로)
+    # 만약 shape가 (100, 10) 이었으면 폴드의 검증 과정에서 저장할 데이터는 (100, 1) 모양을 갖게 한다.
+    train_fold_predict = np.zeros((X_train.shape[0], 1))
+    # test는 X_test 값을 이용해서 매 폴드마다 예측을 하기 때문에 (100, fold개수) 만큼의 shape를 갖게 된다.
+    # 그래서 해당 폴드마다 X_test의 예측 값을 해당 fold에 해당되는 열에 넣는다.
+    test_predict = np.zeros((X_test.shape[0], n_folds))
+    print("model : ", model.__class__.__name__)
+    
+    for cnt, (train_index, valid_index) in enumerate(kfold.split(X_train)):
+        X_train_ = X_train[train_index]
+        y_train_ = y_train[train_index]
+        X_validation = X_train[valid_index]
+        
+        #학습
+        model.fit(X_train_, y_train_)
+        
+        #해당 폴드에서 학습된 모델에다가 검증 데이터(X_validation)로 예측 후 저장
+        train_fold_predict[valid_index, :] = model.predict(X_validation).reshape(-1, 1)
+        
+        #해당 폴드에서 생성된 모델에게 원본 테스트 데이터(X_test)를 이용해서 예측을 수행하고 저장
+        test_predict[:, cnt] = model.predict(X_test)
+    
+    #for문이 끝나면 test_pred는 평균을 내서 하나로 합친다.
+    test_predict_mean = np.mean(test_predict, axis =1).reshape(-1, 1)
+    
+    return train_fold_predict, test_predict_mean
+    
+svm_train, svm_test = get_stacking_data(svm, X_train, y_train, X_test)
+rf_train, rf_test = get_stacking_data(rf, X_train, y_train, X_test)
+lr_train, lr_test = get_stacking_data(lr, X_train, y_train, X_test)
+model :  SVC
+model :  RandomForestClassifier
+model :  LogisticRegression
+이제 새로운 new_X_train과 new_X_test를 생성한다
+In [17]:
+new_X_train = np.concatenate((svm_train, rf_train, lr_train), axis = 1)
+new_X_test = np.concatenate((svm_test, rf_test,lr_test), axis = 1)
+In [18]:
+print("원본 : ", X_train.shape, X_test.shape)
+print("새로운 : ", new_X_train.shape, new_X_test.shape)
+원본 :  (455, 30) (114, 30)
+새로운 :  (455, 3) (114, 3)
+In [19]:
+lgbm.fit(new_X_train, y_train)
+stack_pred = lgbm.predict(new_X_test)
+
+print("정확도 : {0:.4f}".format(accuracy_score(stack_pred, y_test)))
+정확도 : 0.9561
 
 Ref: [stacking ensemble](https://lsjsj92.tistory.com/558)
 
