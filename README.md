@@ -16,7 +16,7 @@
 
 ## 3. Columns
 
-### index
+### Feature
 
 
 gender: 성별
