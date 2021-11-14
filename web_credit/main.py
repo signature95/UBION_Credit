@@ -15,7 +15,7 @@ import pandas as pd
 
 
 # password 설정부분
-_password = 'jjms7794'
+_password = '패스워드를 입력하세요'
 
 # SQL구문
 sample_db = pymysql.connect(
