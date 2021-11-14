@@ -47,7 +47,7 @@
 
       <main class="col-md-9 ms-sm-auto col-lg-10 px-md-4">
         <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
-          <h1 class="h2">EDA_WEB <small>CardNum/income_total</small></h1>
+          <h1 class="h2">EDA_WEB <small>Age/income_total</small></h1>
         </div>
 
         <!-- 그래프 canvas 시작 -->
@@ -56,14 +56,14 @@
             const ctx = document.getElementById('myChart').getContext('2d');
             const myChart = new Chart(ctx, {
                 data: {
-                  labels: {{cardNum}},
+                  labels: {{age}},
                   datasets: [{
                     type: 'line',
                     label: 'income_t_mean',
                     yAxisID: 'ctx-line1',
                     data: {{income_t_mean}},
                     borderColor: 'rgba(54, 162, 235,0.6)',
-                    borderWidth: 7,
+                    borderWidth: 4,
                     pointBorderColor: 'rgba(51, 51, 51,1)',
                     tension: 0.2
                   },
@@ -73,7 +73,7 @@
                     yAxisID: 'ctx-line2',
                     data: {{credit}},
                     borderColor: 'rgba(80, 180, 100,0.6)',
-                    borderWidth: 7,
+                    borderWidth: 4,
                     pointBorderColor: 'rgba(80, 30, 150,1)',
                     tension: 0.2
                   },
@@ -83,10 +83,10 @@
                     yAxisID: 'ctx-line3',
                     data: {{ability}},
                     borderColor: 'rgba(255, 255, 0,0.6)',
-                    borderWidth: 7,
+                    borderWidth: 4,
                     pointBorderColor: 'rgba(100, 100, 100,1)',
                     tension: 0.2
-                  },   
+                  },      
                   {
                     type: 'bar',
                     label: 'income_t_count',
@@ -149,13 +149,13 @@
         </script>
         <!-- 그래프 canvas 끝 -->
 
-        <h2>Table</h2>
-        <div class="table-responsive">
+        <!-- <h2>Table</h2>
+        <div class="table-responsive"> -->
           <!-- 테이블 Tag 영역 -->
-          <table class="table table-striped table-sm" id="users">
+          <!-- <table class="table table-striped table-sm" id="users">
             <thead>
               <tr>
-                <th>cardNum</th>
+                <th>age</th>
                 <th>income_t_count</th>
                 <th>income_t_mean</th>
                 <th>credit_mean</th>
@@ -180,7 +180,8 @@
             {% endif %}
             </tbody>
           </table>
-        </div>
+        </div> -->
+        <!-- 테이블 Tag 영역 끝 -->
       </main>
       </div>
     </div>

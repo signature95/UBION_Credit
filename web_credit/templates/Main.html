@@ -1,0 +1,559 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="">
+    <meta name="author" content="Mark Otto, Jacob Thornton, and Bootstrap contributors">
+    <meta name="generator" content="Hugo 0.88.1">
+    <title>Main_Dashboard</title>
+    <script src = 'http://code.jquery.com/jquery-latest.js'></script>
+    <link rel="canonical" href="https://getbootstrap.com/docs/5.1/examples/dashboard/">
+    <link href="{{url_for('static', filename='css/dashboard.css')}}" rel="stylesheet">
+    <!-- 해당 링크는 페이지 넘버 표시임 -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-ka7Sk0Gln4gmtz2MlQnikT1wXgYsOg+OMhuP+IlRH9sENBO0LRn5q+8nbTov4+1p" crossorigin="anonymous"></script>      
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <!-- Bootstrap core CSS (웹상의 css를 가져오게 된다.)-->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-1BmE4kWBq78iYhFldvKuhfTAU6auU8tT94WrHftjDbrCEXSU1oBoqyl2QvZ6jIW3" crossorigin="anonymous">  
+    <script>
+
+
+      function passing(){
+          var rowPerPage = 100; // 한페이지에 보여줄 데이터의 갯수 지정
+          $('#nav').remove();
+          var $products = $('#products'); // 변수는 products라는 id값을 가진 태그 지정  
+
+          $products.after('<div id="nav">');
+
+          var $tr = $($products).find('tbody tr'); //find는 그 값을 찾고 변경까지 가능해짐.
+          var rowTotals = $tr.length; //tr의 개수는 주식의 개수임. (db에서 tr을 받아오는 경우, data의 개수마다 달라지므로 이를 자동적으로 해결해줌)
+          
+          var pageTotal = Math.ceil(rowTotals/rowPerPage); //한페이지에 4개를 표시한다고 했고 db에서 받아오는 data의 개수별로 페이지를 표시해여하므로 그것을 지정해줌
+
+          var i =0;
+          for(; i < pageTotal; i++){
+              $('<a href="#"></a>')       // 하이퍼 링크를 쓸때 a 를 사용한다
+                  .attr('rel', i)
+                  .html(i + 1)            //여기에 tag를 넣는다
+                  .appendTo('#nav')
+          }; 
+          //js에서 for문 형성 그리고 위에서 10/4를 하면 2로 나옴 따라서 총 3p지만 2p까지 반복을 해야하는 상황
+
+          $tr.addClass('off-screen')
+              .slice(0, rowPerPage)
+              .removeClass('off-screen');
+
+          var $pagingLink = $('#nav a');
+
+          $pagingLink.on('click', function(evt) {     // 맨 앞에 @를 넣으면 에러가 뜨는데 잘 모르겠음. 나중에 다시 볼 것
+              evt.preventDefault();
+              var $this = $(this); //내가 클릭한것을 의미함.
+              if($this.hasClass('active')){   //만약 this가 액티브 클래스를 가지고 있으면 걍 return
+                  return;
+              }; //else를 적지 않아도 return을 통해 다음 줄로 넘어가게 됨. 코드는 불필요한 것을 줄이는 게 좋음. 따라서 else를 안넣고 진행함
+              $pagingLink.removeClass('active'); //만약 그렇지 않으면 active 클래스를 지워라.
+              $this.addClass('active'); //그리고 this에 active를 넣어줘라
+
+              var currPage = $this.attr('rel');
+              var startItem = currPage * rowPerPage;
+              var endItem = startItem + rowPerPage;
+
+              $tr.css('opacity', 0.0)
+                  .addClass('off-screen')
+                  .slice(startItem, endItem)
+                  .removeClass('off-screen')
+                  .animate({opacity:1},300);   //300ms 시간동안 이를 변경하겠다.
+          });
+          $pagingLink.filter(':first').addClass('active');
+      }
+    </script>
+    <style>
+      .bd-placeholder-img {
+        font-size: 1.125rem;
+        text-anchor: middle;
+        -webkit-user-select: none;
+        -moz-user-select: none;
+        user-select: none;
+      }
+
+      @media (min-width: 768px) {
+        .bd-placeholder-img-lg {
+          font-size: 3.5rem;
+        } 
+      }
+      ._left{
+        width: 50%;
+        height: 50px;
+        float: left;
+        background: rgb(28, 135, 243, .5);
+        text-align: center;
+      }
+      ._right{
+          width: 50%;
+          height: 50px;
+          float: right;
+          background: rgb(223, 119, 154, .5);
+          text-align: center;
+      }
+      ._container {
+        margin-right:  5px! important;
+        margin-left :  5px! important;
+      }
+      ._container_right {
+          float: right;
+          width: 50%! important;
+          text-align: center;
+      }
+      ._container_left {
+          float: left;
+          width: 50%! important;
+          text-align: center;
+      }
+      .off-screen {
+          display: none;
+      }
+      #nav {
+          width: 500px;
+          text-align: center;
+      }
+      #nav a {
+          display: inline-block;
+          padding: 3px 5px;
+          margin-right: 10px;
+          font-family: Tahoma;
+          background: #ccc;
+          color : #000;
+          text-decoration: none;
+      }
+      #nav a.achieve {
+          background: #333;
+          color : #fff;
+      }
+      .tr, td {
+        padding: 1px! important;
+      }
+    </style>
+    
+    <!-- Custom styles for this template -->
+  </head>
+  <body onload="passing()" id="site_top">
+    <header class="navbar navbar-dark sticky-top bg-dark flex-md-nowrap p-0 shadow">
+      <a class="navbar-brand col-md-3 col-lg-2 me-0 px-3" href="#site_top">
+        Dacon_Credit
+      </a>
+      <button class="navbar-toggler position-absolute d-md-none collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#sidebarMenu" aria-controls="sidebarMenu" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+        <input class="form-control form-control-dark w-100" type="text" placeholder="번호 0~8758번 중 하나를 입력해주세요" aria-label="Search", id="data_input" >
+      <div class="navbar-nav">
+        <div class="nav-item text-nowrap">
+          <a class="nav-link px-3" href="#" id="bt3">ID Search</a>
+        </div>
+      </div>
+    </header>
+
+    <div class="container-fluid">
+      <div class="row">
+        {% include "nav_bar.html" %}
+      </div>
+    </div>
+        
+    <main class="col-md-9 ms-sm-auto col-lg-10 px-md-4">
+      <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
+        <h1 class="h2">Dashboard</h1>
+      </div>
+      <div>
+        <div style="position: relative;">
+          <table class="table caption-top">
+            <p class='ID_search'>ID를 입력하면 정보를 출력합니다.</p>    
+            <caption class='table_ID_obj'>ID Imformation (Object)</caption>
+            <thead>
+              <tr>
+                <th class="table-primary" style="width :70%;padding-bottom:2px;padding-top:2px">
+                  <b>Column</b>
+                </th>
+                <th class="table-success" style="width: 30%;padding-bottom:2px;padding-top:2px">
+                  <b>Value</b>
+                </th>
+              </tr>
+            </thead>
+            <tbody style="width: 30%;padding-bottom:2px;padding-top:2px">
+                  <th>
+                    <b>Gender</b>
+                  </th>
+                  <th>
+                    <p class="gender"></p>
+                  </th>
+                </tr>
+                <tr>
+                  <th>
+                    <b>Car</b>
+                  </th>
+                  <th>
+                    <p class="car"></p>
+                  </th>
+                </tr>
+                <tr>
+                  <th>
+                    <b>Reality</b>
+                  </th>
+                  <th>
+                    <p class="reality"></p>
+                  </th>
+                </tr>
+                <tr>
+                  <th>
+                    <b>income_type</b>
+                  </th>
+                  <th>
+                    <p class='income_type'></p>
+                  </th>
+                </tr>
+                <tr>
+                  <th>
+                    <b>edu_type</b>
+                  </th>
+                  <th>
+                    <p class="edu_type"></p>
+                  </th>
+                </tr>
+                <tr>
+                  <th>
+                    <b>house_type</b>
+                  </th>
+                  <th>
+                    <p class="house_type"></p>
+                  </th>
+                </tr>
+                <tr>
+                  <th>
+                    <b>occyp_type</b>
+                  </th>
+                  <th>
+                    <p class="occyp_type"></p>
+                  </th>
+                </tr>
+                <tr>
+                  <th>
+                    <b>work_phone</b>
+                  </th>
+                  <th>
+                    <p class="work_phone"></p>
+                  </th>
+                </tr>
+                <tr>
+                  <th>
+                    <b>phone</b>
+                  </th>
+                  <th>
+                    <p class="phone"></p>
+                  </th>
+                </tr>
+                <tr>
+                  <th>
+                    <b>email</b>
+                  </th>
+                  <th>
+                    <p class="email"></p>
+                  </th>
+                </tr>
+            </tbody>
+          </table>
+        </div>
+        <div style="position: relative;">
+          <table class="table caption-top">
+                <caption class='table_ID_num'>ID Imformation (Numeric)</caption>
+                <thead>
+                  <tr>
+                    <th class="table-primary" style="width :70%;padding-bottom:2px;padding-top:2px">
+                      <b>Column</b>
+                    </th>
+                    <th class="table-success" style="width :30%;padding-bottom:2px;padding-top:2px">
+                      <b>Value</b>
+                    </th>
+                  </tr>
+                </thead>
+                <tbody style="width: 30%;padding-bottom:2px;padding-top:2px">
+                  <tr>
+                    <th>
+                      <b>income_total</b>
+                    </th>
+                    <th>
+                      <p class="income_total"></p>
+                    </th>
+                  </tr>
+                  <tr>
+                    <th>
+                      <b>year_total</b>
+                    </th>
+                    <th>
+                      <p class="year_total"></p>
+                    </th>
+                  </tr>
+                  <tr>
+                    <th>
+                      <b>work_total</b>
+                    </th>
+                    <th>
+                      <p class="work_total"></p>
+                    </th>
+                  </tr>              
+                  <tr>
+                    <th>
+                      <b>begin_month</b>
+                    </th>
+                    <th>
+                      <p class="begin_month"></p>
+                    </th>
+                  </tr>                         
+                  <tr>
+                    <th>
+                      <b>Card_num</b>
+                    </th>
+                    <th>
+                      <p class="Nth_card"></p>
+                    </th>
+                  </tr>              
+                  <tr>
+                    <th>
+                      <b>child_num</b>
+                    </th>
+                    <th>
+                      <p class="child_num"></p>
+                    </th>
+                  </tr>              
+                  <tr>
+                    <th>
+                      <b>family_size</b>
+                    </th>
+                    <th>
+                      <p class="family_size"></p>
+                    </th>
+                  </tr>              
+                  <tr class="table-warning">
+                    <th>
+                      <b>credit</b>
+                    </th>
+                    <th>
+                      <p class="credit"></p>
+                    </th>
+                  </tr>
+                </tbody>
+          </table>
+        </div>
+      </div>
+      <div id="chart">
+        <canvas  id="myChart" width="200" height="100"></canvas>
+        <script>
+          var ctx = document.getElementById('myChart')
+          var myChart = new Chart(ctx, {
+            type: 'bar',
+            data: {
+              labels: ['Child_num','Income_total', 'Family_size', 'Begin_month', 'Year_total','Work_total', 'Nth_card', 'Ability'],
+              datasets: [{
+                label: 'ID imformation (단위 : %)',
+                data: [78, 43, 82, 32, 52, 58, 44, 38],
+                fill: true,
+                lineTension: 0,
+                backgroundColor: 'rgba(10, 13, 173, .5)',
+                borderColor: 'rgb(10, 13, 173)',
+                pointBackgroundColor: 'rgb(10, 61, 173)',
+                pointBorderColor: 'rgb(10, 61, 173)',
+                pointHoverBackgroundColor: 'rgb(10, 61, 173)',
+                pointHoverBorderColor: 'rgb(10, 61, 173)'
+              }
+              ]
+            },
+            options: {
+              elements: {
+                line: {
+                  borderWidth: 4
+                }
+              },
+              plugins: {
+                subtitle: {
+                    display: true,
+                    text: 'Max = 100%, min = 0%로 출력되는 그래프입니다.'
+                }
+            },
+              scales: {
+                r: {
+                  angleLines: {
+                    color: 'red'
+                  }
+                },
+                yAxes: [{
+                  ticks: {
+                    beginAtZero: true
+                  }
+                }]
+              },
+              legend: {
+                display: true,
+                labels: {
+                  color: 'rgb(54, 162, 235)'
+              }
+              }
+            }
+          })
+        </script>
+      </div>
+
+      <!-- user list 출력 부분 -->
+      <h2>User List</h2>
+      <div class="table-responsive">
+        {% if result %}
+          <table class="table table-striped" id='products'>
+            <thead>
+              <tr>
+                <th>ID</th>
+                <th>Gender</th>
+                <th>income_total</th>
+                <th>income_type</th>
+                <th>edu_type</th>
+                <th>family_type</th>
+                <th>occyp_type</th>
+                <th>begin_month</th>
+                <th>year_total</th>
+                <th>work_total</th>
+                <th>Nth_card</th>
+                <th>credit</th>
+              </tr>
+            </thead>
+            <tbody>
+              {% for list in result %}
+                <tr>
+                  <td>{{list[0]}}</td>
+                  <td>{{list[1]}}</td>
+                  <td>{{list[5]}}</td>
+                  <td>{{list[6]}}</td>
+                  <td>{{list[7]}}</td>
+                  <td>{{list[8]}}</td>
+                  <td>{{list[15]}}</td>
+                  <td>{{list[17]}}</td>
+                  <td>{{list[19]}}</td>
+                  <td>{{list[20]}}</td>
+                  <td>{{list[21]}}</td>
+                  <td>{{list[18]}}</td>
+                </tr>
+              {% endfor %}
+            </tbody>
+          </table>
+        {% else %}
+        <tr>Chart Table에 데이터가 없습니다.</tr>
+        {% endif %}
+      </div>
+    </main>  
+    
+    <script>
+      function bar_graph(data){
+        var ctx = document.getElementById('myChart')
+        var myChart = new Chart(ctx, {
+          type: 'bar',
+          data: {
+            labels: ['Child_num','Income_total', 'Family_size', 'Begin_month', 'Year_total','Work_total', 'Nth_card', 'Ability'],
+            datasets: [{
+              label: 'ID imformation (단위 : %)',
+              data: data,
+              fill: true,
+              lineTension: 0,
+              backgroundColor: 'rgba(10, 13, 173, .5)',
+              borderColor: 'rgb(10, 13, 173)',
+              pointBackgroundColor: 'rgb(10, 61, 173)',
+              pointBorderColor: 'rgb(10, 61, 173)',
+              pointHoverBackgroundColor: 'rgb(10, 61, 173)',
+              pointHoverBorderColor: 'rgb(10, 61, 173)'
+            }
+            ]
+          },
+          options: {
+            elements: {
+              line: {
+                borderWidth: 4
+              }
+            },
+            plugins: {
+              subtitle: {
+                  display: true,
+                  text: 'Max = 100%, min = 0%로 출력되는 그래프입니다.'
+              }
+          },
+            scales: {
+              r: {
+                angleLines: {
+                  color: 'red'
+                }
+              },
+              yAxes: [{
+                ticks: {
+                  beginAtZero: true
+                }
+              }]
+            },
+            legend: {
+              display: true,
+              labels: {
+                color: 'rgb(54, 162, 235)'
+            }
+            }
+          }
+        })
+      };
+
+      
+      $("#data_input").keydown(function(keyNum){ //현재의 키보드의 입력값을 keyNum으로 받음 
+        if(keyNum.keyCode == 13){ 
+          // keydown으로 발생한 keyNum의 숫자체크 
+          // 숫자가 enter의 아스키코드 13과 같으면 
+          // 기존에 정의된 클릭함수를 호출 
+          $("#bt3").click() } })
+
+
+
+      $('#bt3').click(function(){
+        // getJSON은 ()내에 url, data, function만 적어주면 끝임.
+        // 위는 url, data, method, data_type을 다 적고, 성공과 에러, always를 전부 입력해야 했지만, 이를 단축할 수 있다.
+        $.getJSON(      //getJSON으로 data형태는 json으로 받아오겠다고 하는 것. (text를 받는 경우, get만 적으면 됨.)
+                        //postJSON으로 한다면 json형태로 받고 post하겠다는 것
+            "/get_json",
+            {
+                'message' : $('#data_input').val()
+            },
+            function(result2, status){ //status 200은 성공을 의미함, 404는 페이지를 찾을 수 없다는 코드 에러임
+              
+              $('p.all').text(result2[0][0][0])
+              $('p.ID_search').text('ID ' + result2[0][0][0] + '번을 출력합니다.')
+              $('caption.table_ID_obj').text('ID 번호 ' +result2[0][0][0] + '번 : Imformation (Object)') //ID Imformation (Object)
+              $('caption.table_ID_num').text('ID 번호 ' +result2[0][0][0] + '번 : Imformation (Numeric)') //ID Imformation (Numeric)
+              $('p.ID').text(result2[0][0][0])
+              $('p.gender').text(result2[0][0][1])
+              $('p.car').text(result2[0][0][2])
+              $('p.reality').text(result2[0][0][3])
+              $('p.child_num').text(result2[0][0][4] + '명')
+              $('p.income_total').text(result2[0][0][5]/10000 +'(단위 :10000)')
+              $('p.income_type').text(result2[0][0][6])
+              $('p.edu_type').text(result2[0][0][7])
+              $('p.family_type').text(result2[0][0][8])
+              $('p.house_type').text(result2[0][0][9])
+              $('p.work_phone').text(result2[0][0][12])
+              $('p.phone').text(result2[0][0][13])
+              $('p.email').text(result2[0][0][14])
+              $('p.occyp_type').text(result2[0][0][15])
+              $('p.family_size').text(result2[0][0][16] + '명')
+              $('p.begin_month').text(result2[0][0][17] +'개월')
+              $('p.credit').text(result2[0][0][18])
+              $('p.year_total').text(result2[0][0][19] + '년')
+              $('p.work_total').text(result2[0][0][20] + '년')
+              $('p.Nth_card').text(result2[0][0][21] + '개')
+              $('p.ablity').text(result2[0][0][22])
+
+              
+              $('#chart').html(`<canvas id="myChart" width="200" height="100"></canvas>`)
+              bar_graph(result2[1])
+
+            }) 
+          })
+    </script>
+    
+  </body>
+</html>
