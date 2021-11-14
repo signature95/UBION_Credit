@@ -127,3 +127,12 @@ credit: 사용자의 신용카드 대금 연체를 기준으로 한 신용도
 - [2Blackboar4all](https://github.com/Blackboar4all)
 - [MarvinShin](https://github.com/MarvinShin)
 
+
+## Dataset (google)
+
+- [google_drive](https://drive.google.com/drive/folders/1mp_sts2FeDztiO327HuHnQmPw2Tr6Gwu)
+
+
+## Diary (google)
+
+- [google_dirve](https://drive.google.com/drive/folders/1lj8r8ZlBvyuTnPDNp9VYmV-lIRJ43C6L)
