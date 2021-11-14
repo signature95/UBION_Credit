@@ -194,10 +194,10 @@ CV기반 스태킹은 각 모델들이 교차 검증으로 최종 모델을 위�
 <img width="452" alt="image" src="https://user-images.githubusercontent.com/87803612/140097275-271627e6-7407-46ae-92cd-20246a69bc5c.png">
 
 
-from sklearn.model_selection import KFold, StratifiedKFold
+    from sklearn.model_selection import KFold, StratifiedKFold
 
-def get_stacking_data(model, X_train, y_train, X_test, n_folds=5):
-    kfold = KFold(n_splits = n_folds, random_state = 0)
+    def get_stacking_data(model, X_train, y_train, X_test, n_folds=5):
+        kfold = KFold(n_splits = n_folds, random_state = 0)
     
     # 최종 모델에서 사용할 데이터 셋 셋팅(0 값으로)
     # 만약 shape가 (100, 10) 이었으면 폴드의 검증 과정에서 저장할 데이터는 (100, 1) 모양을 갖게 한다.
