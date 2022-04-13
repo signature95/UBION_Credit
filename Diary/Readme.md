@@ -14,7 +14,11 @@
 
 <img width="1000" alt="스크린샷 2021-11-04 오전 1 32 57" src="https://user-images.githubusercontent.com/87803612/140102761-a50c8f84-277c-4514-9896-3b9c050c2a06.png">
 
-[download_link](https://github.com/signature95/UBION_Credit/blob/main/Diary/Dacon2_middle%20(1).pptx)
+[link](https://github.com/signature95/UBION_Credit/blob/main/Diary/Dacon2_middle%20(1).pptx)
 
 
 ## 최종 발표 PPT
+
+![스크린샷 2022-04-13 오후 11 22 33](https://user-images.githubusercontent.com/87803612/163202078-6f09b7e1-3fb9-4748-a865-374ca985035a.png)
+
+[link](https://github.com/signature95/UBION_Credit/raw/main/Diary/Dacon2_final.pptx)
